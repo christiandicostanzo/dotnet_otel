@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MicroserviceA/MicroserviceA.csproj" />
+  <Project Path="MicroserviceB/MicroserviceB.csproj" />
+</Solution>
