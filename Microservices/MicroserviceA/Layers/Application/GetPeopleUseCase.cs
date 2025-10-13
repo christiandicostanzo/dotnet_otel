@@ -1,7 +1,11 @@
 ﻿using MicroserviceA.Layers.Infrastructure;
-using OpenTelemetry.Trace;
 using MicroserviceA.Layers.Models;
+using OpenTelemetry;
+using OpenTelemetry.Context.Propagation;
+using OpenTelemetry.Trace;
 using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace MicroserviceA.Layers.Application;
 
@@ -9,7 +13,8 @@ public class GetPeopleUseCase
 (
     TracerProvider tracerProvider,
     PeopleRespository peopleRespository,
-    ActivitySource activitySource
+    ActivitySource activitySource,
+    IHttpClientFactory _httpClientFactory
 )
 {
     private readonly Tracer _tracer = tracerProvider.GetTracer("MicroserviceA.GetPeopleUseCase");
@@ -33,10 +38,22 @@ public class GetPeopleUseCase
 
     public Person GetPersonById(int id)
     {
+
         using var activity = activitySource.StartActivity("GetPeopleUseCase.GetPersonById", ActivityKind.Internal);
         activity?.SetTag("person.id", id);
         try
-        { 
+        {
+
+            var client = _httpClientFactory.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5229/countries");
+
+            Propagators.DefaultTextMapPropagator.Inject(
+                new PropagationContext(activity.Context, Baggage.Current), 
+                request, 
+                (r, name, value) => r.Headers.Add(name, value));
+
+            var countries = client.SendAsync(request).Result;
+
             var person = peopleRespository.GetPersonById(id);
             activity?.SetTag("person.found", person != null);
             return person;

@@ -11,38 +11,9 @@ public static class PeopleEndpoints
     public static WebApplication AddPeopleEndpoints(this WebApplication app)
     {
         var peopleApi = app.MapGroup("/people");
-
-        peopleApi
-            .WithDisplayName("Microservice A - People Api");
-            //.AddEndpointFilter(async (context, next) =>
-            //{
-            //    var tracer = context.HttpContext.RequestServices.GetService<TracerProvider>()?.GetTracer("MicroserviceA.PeopleEndpoints");
-            //    var span = tracer?.StartSpan("PeopleEndpointRequest");
-            //    try
-            //    {
-            //        span?.SetAttribute("http.method", context.HttpContext.Request.Method);
-            //        span?.SetAttribute("http.path", context.HttpContext.Request.Path);
-            //        span?.SetAttribute("christian.dicostanzo", "MY ATTRIBUTE");
-
-            //        var result = await next(context);
-            //        span?.SetAttribute("http.status_code", context.HttpContext.Response.StatusCode);
-            //        return result;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        span?.SetAttribute("otel.status_code", "ERROR");
-            //        span?.SetAttribute("otel.status_description", ex.Message);
-            //        throw;
-            //    }
-            //    finally
-            //    {
-            //        span?.End();
-            //    }
-            //});
-
+        peopleApi.WithDisplayName("Microservice A - People Api");
         peopleApi.MapGet("/", GetPeople);
         peopleApi.MapGet("/{personId}", GetPersonById);
-
         return app;
     }
 
