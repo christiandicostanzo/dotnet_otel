@@ -22,16 +22,15 @@ public static class PeopleEndpoints
         TracerProvider tracerProvider,
         CancellationToken cancellation)
     {
-        return getPeopleUseCase.GetPeople();
+        return await Task.Run(() => getPeopleUseCase.GetPeople(), cancellation);
     }
 
     public static async Task<Person> GetPersonById(
         int personId,
-         GetPeopleUseCase getPeopleUseCase,
+        GetPeopleUseCase getPeopleUseCase,
         TracerProvider tracerProvider,
         CancellationToken cancellation)
     {
-        return getPeopleUseCase.GetPersonById(personId);
+        return await Task.Run(() => getPeopleUseCase.GetPersonById(personId), cancellation);
     }
-
 }

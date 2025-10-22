@@ -17,8 +17,6 @@ public class GetPeopleUseCase
     IHttpClientFactory _httpClientFactory
 )
 {
-    private readonly Tracer _tracer = tracerProvider.GetTracer("MicroserviceA.GetPeopleUseCase");
-
     public List<Person> GetPeople()
     {
         using var activity = activitySource.StartActivity("GetPeopleUseCase.GetPeople", ActivityKind.Internal);
