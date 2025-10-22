@@ -29,14 +29,8 @@ public static class PeopleEndpoints
         TracerProvider tracerProvider,
         CancellationToken cancellation)
     {
-        try
-        {
-            return getPeopleUseCase.GetPeople();    
-        }
-        catch(Exception ex)
-        {
-            throw ex;
-        }
+
+        return await Task.Run(() => getPeopleUseCase.GetPeople());
     }
 
     /// <summary>
