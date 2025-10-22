@@ -22,7 +22,14 @@ public static class PeopleEndpoints
         TracerProvider tracerProvider,
         CancellationToken cancellation)
     {
-        return getPeopleUseCase.GetPeople();
+        try
+        {
+            return getPeopleUseCase.GetPeople();    
+        }
+        catch(Exception ex)
+        {
+            throw ex;
+        }
     }
 
     public static async Task<Person> GetPersonById(
